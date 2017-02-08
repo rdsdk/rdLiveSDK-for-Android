@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RDLiveDemo</string>
+    <string name="hint_live_title">给你的直播写个标题吧</string>
+    <string name="startLive">开始直播</string>
+    <string name="title_activity_live_config">LiveConfigActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="uid_hint">请设置Uid(数字或小写字母的组合(3-32个字符)</string>
+    <string name="url_hint">请设置rtmp流地址</string>
+    <string name="rdserver">使用锐动服务器</string>
+    <string name="thirdserver">使用三方服务器</string>
+    <string name="beautifyLevel">美颜强度 %d</string>
+    <string name="mix_music_n">无伴音</string>
+    <string name="mix_music_ed">伴音开启</string>
+    <string name="mute_n">静音关闭</string>
+    <string name="mute_ed">静音开启</string>
+    <string name="shot">截图</string>
+    <string name="face_n">人脸关闭</string>
+    <string name="face_p">人脸开启</string>
+    <string name="osd_p">水印开启</string>
+    <string name="osd_n">水印关闭</string>
+
+</resources>

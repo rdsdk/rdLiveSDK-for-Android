@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mixlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone" >
+
+    <View
+        android:id="@+id/mix_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shadow_music_layout" />
+
+    <LinearLayout
+        android:id="@+id/shadow_music_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent_black"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/shadow_music"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/shadow_pull" />
+
+            <View style="@style/lineStyle" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/mix_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@null"
+            android:divider="@null"
+            android:minHeight="150dp" >
+        </ListView>
+    </LinearLayout>
+
+</RelativeLayout>

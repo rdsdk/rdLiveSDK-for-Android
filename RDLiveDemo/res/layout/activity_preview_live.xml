@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black" >
+
+    <!-- 嵌套留给直播摄像头画面 -->
+
+    <RelativeLayout
+        android:id="@+id/frameAspectRatioPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </RelativeLayout>
+
+    <!-- 引用拍摄界面除底部栏的按钮控件 -->
+
+    <include layout="@layout/indicator_bar_live" />
+
+    <!-- 高级菜单控制项 -->
+
+    <include layout="@layout/menu_layout" />
+
+ 
+
+
+
+</FrameLayout>

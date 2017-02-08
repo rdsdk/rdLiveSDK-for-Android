@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/beautify_level_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@color/transparent_black80"
+    android:orientation="vertical"
+    android:visibility="gone" >
+
+    <SeekBar
+        android:id="@+id/liveLevelBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:max="5"
+        android:progress="3"
+        android:progressDrawable="@drawable/beautify_level"
+        android:thumb="@drawable/beautify_level_thumb" />
+
+    <TextView
+        android:id="@+id/tvBeautifyLevel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/beautifyLevel"
+        android:textColor="@color/beautify_level"
+        android:textSize="@dimen/text_size_16" />
+
+</LinearLayout>

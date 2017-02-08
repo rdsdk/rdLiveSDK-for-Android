@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/animlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone" >
+
+    <!-- 点击R.id.flash_view_top 自动关闭人脸控制面板 -->
+    <View
+        android:id="@+id/flash_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shadow_flash" />
+
+    <LinearLayout
+        android:id="@+id/shadow_flash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/flash_view_layout"
+        android:layout_centerHorizontal="true"
+        android:background="@color/transparent_black"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/shadow_pull" />
+        <View style="@style/lineStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/flash_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent_black"
+        android:orientation="vertical" >
+
+        <com.rd.live.ui.RdGridViewBase
+            android:id="@+id/flash_rdgridview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp" >
+        </com.rd.live.ui.RdGridViewBase>
+    </LinearLayout>
+
+</RelativeLayout>

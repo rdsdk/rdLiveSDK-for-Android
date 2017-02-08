@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 点击时的字体颜色 -->
+    <item android:state_pressed="true" android:color="@android:color/darker_gray"></item>
+    <item android:state_focused="true" android:color="@android:color/darker_gray"></item>
+    <item android:state_checked="true" android:color="@android:color/darker_gray"></item>
+    <!-- 普通状态 -->
+    <item android:color="@android:color/white"/>
+
+</selector>

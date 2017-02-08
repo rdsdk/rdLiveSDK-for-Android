@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#ff000000</color>
+    <color name="public_title_text_color">#D1D5DE</color>
+    <color name="camera_list_back_color">#70000000</color>
+    <color name="public_title_text_color_d">#545454</color>
+    <color name="public_title_text_color_p">#9FD1D5DE</color>
+    <color name="transparent">#00FFFFFF</color>
+
+    <!-- 半透明黑色  50透明度 0000000 黑色码 -->
+    <color name="transparent_black">#50000000</color>
+    <color name="transparent_black80">#80000000</color>
+    <!-- 半透明 50 白色 -->
+    <color name="transparent_white">#88FFFFFF</color>
+    <color name="red">#b60000</color>
+
+    <!-- app -->
+    <color name="main_color">#fe3569</color>
+    <color name="main_bg">#f0f0f0</color>
+    <color name="beautify_level">#007aff</color>
+
+</resources>
