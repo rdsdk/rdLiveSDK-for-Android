@@ -42,7 +42,6 @@ public class AppImp extends Application {
 
 		PathUtils.initialize(Environment.getExternalStorageDirectory() + "/"
 				+ context.getApplicationInfo().packageName);
-
 		// 加载内置资源
 		initAssetRes2File(context);
 	}
