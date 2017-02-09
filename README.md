@@ -26,7 +26,7 @@
 * **支持横竖屏**
 
 ####&emsp;截图
-<img src="website/static/live1.jpg" width = "200" /> <img src="website/static/live2.jpg" width = "200" /> <img src="website/static/live3.jpg" width = "200" />
+<img src="website/static/live1.jpg" width = "200" /> <img src="website/static/live2.jpg" width = "200" /> <img src="website/static/live3.jpg" width = "200" /> <img src="website/static/live4.jpg" width = "200" />
 
 
 ###关于授权：
