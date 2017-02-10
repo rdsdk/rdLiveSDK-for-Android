@@ -27,7 +27,10 @@
 
 ####&emsp;截图
 <img src="website/static/live1.jpg" width = "200" /> <img src="website/static/live2.jpg" width = "200" /> <img src="website/static/live3.jpg" width = "200" /> <img src="website/static/live4.jpg" width = "200" />
+###功能试用：
+下载以下demo应用，可以进行功能试用。
 
+[点击下载](https://raw.githubusercontent.com/rdsdk/rdLiveSDK-for-Android/master/RDLiveDemo-release.apk)
 
 ###关于授权：
 
