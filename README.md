@@ -27,6 +27,11 @@
 
 ####&emsp;截图
 <img src="website/static/live1.jpg" width = "200" /> <img src="website/static/live2.jpg" width = "200" /> <img src="website/static/live3.jpg" width = "200" /> <img src="website/static/live4.jpg" width = "200" />
+
+###最新SDK下载(以下链接是最新的，github代码会稍有延迟)：
+
+[SDK下载请单击](http://d.56show.com/rdsdk/private/pack/rd_live_android_20170123.zip)
+
 ###功能试用：
 下载以下demo应用，可以进行功能试用。
 
