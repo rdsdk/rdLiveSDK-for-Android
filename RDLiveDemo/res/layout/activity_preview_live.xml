@@ -11,16 +11,50 @@
         android:layout_height="match_parent" >
     </RelativeLayout>
 
-    <!-- 引用拍摄界面除底部栏的按钮控件 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <include layout="@layout/indicator_bar_live" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <!-- 高级菜单控制项 -->
+            <include layout="@layout/indicator_bar_live" />
+        </LinearLayout>
 
-    <include layout="@layout/menu_layout" />
+        <!-- 引用拍摄界面除底部栏的按钮控件 -->
 
- 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/titlebar_height"
+            android:orientation="vertical" >
 
+            <include layout="@layout/touchlayout" />
+        </LinearLayout>
+        <!-- 高级菜单控制项 -->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+
+            <include layout="@layout/menu_layout" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <include layout="@layout/out_hint_layout" />
+    </FrameLayout>
 
 </FrameLayout>

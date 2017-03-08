@@ -5,18 +5,22 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.rd.recorder.LiveConfig;
 
 /**
  * 直播配置
+ * 
  * @author JIAN
  * @date 2017-1-17 下午2:36:06
  */
 public class ExtAlertDialog extends Dialog {
 	private IDialogListener listener;
 	private RadioButton rbHD, rbSD, rbFront, rbRear, rbEnabled, rbUnEanble;
+	private EditText tvTitle;
 
 	public ExtAlertDialog(Context context, IDialogListener mlistener) {
 		super(context, R.style.dialog);
@@ -35,6 +39,7 @@ public class ExtAlertDialog extends Dialog {
 
 					@Override
 					public void onClick(View v) {
+						hideInput();
 						ExtAlertDialog.this.cancel();
 						if (null != listener) {
 							listener.onCancel(ExtAlertDialog.this);
@@ -46,8 +51,10 @@ public class ExtAlertDialog extends Dialog {
 
 					@Override
 					public void onClick(View v) {
+						hideInput();
 						ExtAlertDialog.this.cancel();
 						onSaveConfig();
+
 					}
 				});
 
@@ -75,8 +82,9 @@ public class ExtAlertDialog extends Dialog {
 			} else {
 				temp.enableBeautify(false);
 			}
+			String title = tvTitle.getText().toString();
 			// 设置直播参数
-			listener.onSure(ExtAlertDialog.this, temp);
+			listener.onSure(ExtAlertDialog.this, temp, title);
 		}
 	}
 
@@ -96,7 +104,7 @@ public class ExtAlertDialog extends Dialog {
 		rbEnabled = (RadioButton) findViewById(R.id.rbliveBeautifyEnabled);
 		rbUnEanble = (RadioButton) findViewById(R.id.rbliveBeautifyUnenabled);
 		rbEnabled.setChecked(true);
-
+		tvTitle = (EditText) findViewById(R.id.et_live_title);
 	}
 
 	/**
@@ -116,7 +124,7 @@ public class ExtAlertDialog extends Dialog {
 	 */
 	private LiveConfig onSD() {
 		// 标清的推荐参数
-		return new LiveConfig().setOutSize(180, 320).setLiveBit(400 * 1000)
+		return new LiveConfig().setOutSize(360, 640).setLiveBit(600 * 1000)
 				.setFrame(15);
 
 	}
@@ -125,6 +133,22 @@ public class ExtAlertDialog extends Dialog {
 	protected void onStop() {
 		super.onStop();
 
+	}
+
+	/**
+	 * 隐藏输入法
+	 */
+	private void hideInput() {
+		try {
+
+			InputMethodManager input = (InputMethodManager) tvTitle
+					.getContext()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			input.hideSoftInputFromWindow(tvTitle.getWindowToken(),
+					InputMethodManager.HIDE_NOT_ALWAYS);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -141,7 +165,7 @@ public class ExtAlertDialog extends Dialog {
 		 * @param config
 		 *            直播参数
 		 */
-		public void onSure(Dialog dialog, LiveConfig config);
+		public void onSure(Dialog dialog, LiveConfig config, String title);
 
 		/**
 		 * 取消

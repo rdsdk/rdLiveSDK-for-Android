@@ -10,10 +10,10 @@ import android.os.Environment;
 
 import com.rd.demo.utils.FileUtils;
 import com.rd.demo.utils.PathUtils;
-import com.rd.flash.FlashHandler;
 import com.rd.lib.utils.CoreUtils;
 import com.rd.lib.utils.ThreadPoolUtils;
 import com.rd.live.RDLiveSDK;
+import com.rd.mix.FaceFragment;
 
 public class AppImp extends Application {
 	/**
@@ -29,6 +29,7 @@ public class AppImp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		// Log.e("oncreate", this.toString());
 		// 初始appkey和appsecret
 		init(this);
 
@@ -42,6 +43,7 @@ public class AppImp extends Application {
 
 		PathUtils.initialize(Environment.getExternalStorageDirectory() + "/"
 				+ context.getApplicationInfo().packageName);
+
 		// 加载内置资源
 		initAssetRes2File(context);
 	}
@@ -57,7 +59,7 @@ public class AppImp extends Application {
 
 			@Override
 			public void run() {
-				String assetDir = PathUtils.createDir(FlashHandler.ASSET);
+				String assetDir = PathUtils.createDir(FaceFragment.ASSET);
 
 				String flashDirName = "frame_shot";
 				File flashRoot = new File(assetDir, flashDirName);

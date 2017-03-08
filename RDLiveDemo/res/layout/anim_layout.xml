@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/animlayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="gone" >
+    android:layout_height="match_parent" >
 
     <!-- 点击R.id.flash_view_top 自动关闭人脸控制面板 -->
+
     <View
         android:id="@+id/flash_view_top"
         android:layout_width="match_parent"
@@ -27,7 +27,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@drawable/shadow_pull" />
-        <View style="@style/lineStyle" />
+
+        <View style="@style/lineStyle" />
     </LinearLayout>
 
     <LinearLayout

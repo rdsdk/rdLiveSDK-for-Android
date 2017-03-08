@@ -2,12 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/menuLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="bottom" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="bottom" >
 
         <LinearLayout
@@ -72,7 +72,8 @@
                     android:background="@null"
                     android:drawableTop="@drawable/face_n"
                     android:text="@string/face_n"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/btnOsd"
@@ -86,13 +87,6 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-    <!-- 人脸 -->
-
-    <include layout="@layout/anim_layout" />
-    <!-- 混音 -->
-
-    <include layout="@layout/mix_music_layout" />
 
     <include layout="@layout/beautify_level_layout" />
 

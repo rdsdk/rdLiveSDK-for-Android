@@ -25,11 +25,13 @@
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="lineStyle">
         <item name="android:background">@color/transparent_black</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
     </style>
+
     <style name="liveConfigRadiobtnStyle">
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/black</item>

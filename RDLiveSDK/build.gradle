@@ -1,9 +1,12 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile 'com.rd:base:0.0.7'
-    compile 'com.rd:recorderbase:0.0.4'
-    compile fileTree(dir: 'libs',  exclude:['com.rd.base.jar','recorderbase.jar'],include: '*.jar')
+    compile fileTree(dir: 'libs',  exclude:['com.rd.base.jar','recorderbase.jar','fastjson-1.1.24.jar','okhttp-3.5.0.jar','okio-1.11.0.jar'],include: '*.jar')
+    compile 'com.rd:base:0.0.9'
+    compile 'com.rd:recorderbase:0.0.9'
+    compile 'com.squareup.okio:okio:1.11.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.alibaba:fastjson:1.1.24'
 }
 
 android {

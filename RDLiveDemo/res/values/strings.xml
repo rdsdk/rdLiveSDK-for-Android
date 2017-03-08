@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">RDLiveDemo</string>
+    <string name="app_name">直播SDK</string>
     <string name="hint_live_title">给你的直播写个标题吧</string>
     <string name="startLive">开始直播</string>
     <string name="title_activity_live_config">LiveConfigActivity</string>
@@ -21,5 +21,10 @@
     <string name="face_p">人脸开启</string>
     <string name="osd_p">水印开启</string>
     <string name="osd_n">水印关闭</string>
+    <string name="closemix">关闭伴乐</string>
+    <string name="out_horizontal_1"> 现在是横屏直播模式  </string>
+    <string name="out_horizontal_2"> 请保持横屏</string>
+    <string name="out_vertical_1">现在是竖屏直播模式</string>
+    <string name="out_vertical_2">请保持竖屏</string>
 
 </resources>

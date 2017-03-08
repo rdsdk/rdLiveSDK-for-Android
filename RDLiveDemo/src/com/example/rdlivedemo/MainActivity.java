@@ -238,17 +238,6 @@ public class MainActivity extends Activity {
 				});
 			}
 		});
-		// // 直播参数配置
-		// findViewById(R.id.mbtnLiveConfig).setOnClickListener(
-		// new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// startActivity(new Intent(MainActivity.this,
-		// LiveConfigActivity.class));
-		//
-		// }
-		// });
 		// 默认选择锐动服务器
 		if (rdServer.isChecked()) {
 			onCheckedRdServer();
@@ -314,9 +303,10 @@ public class MainActivity extends Activity {
 		Dialog d = new ExtAlertDialog(this, new IDialogListener() {
 
 			@Override
-			public void onSure(Dialog dialog, LiveConfig config) {
+			public void onSure(Dialog dialog, LiveConfig config, String title) {
 
-				LiveActivity.startSelf(MainActivity.this, uidORtmp, config);
+				LiveActivity.startSelf(MainActivity.this, uidORtmp, config,
+						title);
 			}
 
 			@Override

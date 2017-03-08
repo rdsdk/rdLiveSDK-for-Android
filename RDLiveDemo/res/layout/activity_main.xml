@@ -119,7 +119,7 @@
             android:checked="true"
             android:gravity="center"
             android:text="@string/rdserver"
-            android:textColor="@drawable/button_color" />
+            android:textColor="@drawable/radio_btn__color" />
 
         <RadioButton
             android:id="@+id/thirdServer"
@@ -130,7 +130,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="@string/thirdserver"
-            android:textColor="@drawable/button_color" />
+            android:textColor="@drawable/radio_btn__color" />
     </RadioGroup>
 
 </LinearLayout>

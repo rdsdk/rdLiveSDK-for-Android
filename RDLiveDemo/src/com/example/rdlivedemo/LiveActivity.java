@@ -2,6 +2,7 @@ package com.example.rdlivedemo;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,18 +17,19 @@ import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.rd.base.BaseActivity;
 import com.rd.demo.utils.Utils;
 import com.rd.live.RDLiveSDK;
 import com.rd.live.ui.GlTouchView;
 import com.rd.live.ui.LiveCameraZoomHandler;
+import com.rd.mix.PlayerUtils;
 import com.rd.recorder.IRecorderListener;
 import com.rd.recorder.LiveConfig;
 import com.rd.recorder.ResultConstants;
@@ -40,28 +42,47 @@ import com.rd.recorder.ResultConstants;
 public class LiveActivity extends BaseActivity {
 	private static final String PARAMUIDO_RTMP = "uidOrtmp";
 	private static final String PARAMLIVE_CONFIG = "liveconfig";// 直播参数
-	private static final String TAG = "LiveActivity";
+	private static final String PARAMLIVE_TITLE = "livetitle";// 直播参数
 	private ImageView m_btnChangeCamera, camare_flash;
 	private Button m_btnLive;
-	private EditText etliveTitle;
 	private GlTouchView touchview;
 	private String uidORtmp;
 	private LiveCameraZoomHandler m_hlrCameraZoom;
-	private MyOrientationEventListener m_orientationListener;
 	private List<String> effects;// 支持的滤镜
 	private View beautifybtn;// 美颜按钮
 
 	private ImageView mCustom;
 	private MenuCustomHanlder customHanlder;
 
+	private String title;
+	private OutOrientationHandler outTationHandler;
+
+	@SuppressLint("NewApi")
+	private void setRotationAnimation() {
+		if (Utils.hasJellyBeanMR2()) {
+			int rotationAnimation = WindowManager.LayoutParams.ROTATION_ANIMATION_JUMPCUT;
+			Window win = getWindow();
+			WindowManager.LayoutParams winParams = win.getAttributes();
+			winParams.rotationAnimation = rotationAnimation;
+			win.setAttributes(winParams);
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRotationAnimation();
+		TAG = this.toString();
 		isfirst = true;
+		logI(TAG, "oncreate");
 		// 获取传入的url或rtmp链接
 		uidORtmp = getIntent().getStringExtra(PARAMUIDO_RTMP);
 		LiveConfig config = (LiveConfig) getIntent().getSerializableExtra(
 				PARAMLIVE_CONFIG);
+		title = getIntent().getStringExtra(PARAMLIVE_TITLE);
+		if (TextUtils.isEmpty(title)) {
+			title = "直播";
+		}
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_preview_live);
@@ -81,19 +102,16 @@ public class LiveActivity extends BaseActivity {
 		// 设置推流超时
 		RDLiveSDK.setApiLiveSetRtmpUploadPacketTimeout(10);
 
-		// 获取当前屏幕方向
-		m_orientationListener = new MyOrientationEventListener(this);
 		// 初始化高级功能界面按钮
-		menuHanlder = new MenuHanlder(findViewById(R.id.menuLayout));
+		menuHanlder = new MenuHanlder(this, findViewById(R.id.menuLayout));
 		customHanlder = new MenuCustomHanlder(this);
+		orientationListener = new MyOrientationEventListener(this);
 
 	}
 
 	private MenuHanlder menuHanlder;
 
 	private void initViews() {
-
-		etliveTitle = (EditText) findViewById(R.id.et_live_title);
 		camare_flash = (ImageView) findViewById(R.id.btnCamareFlash);
 		camare_flash.setOnClickListener(new OnClickListener() {
 
@@ -147,8 +165,10 @@ public class LiveActivity extends BaseActivity {
 				if (aType != RDLiveSDK.AT_INVALID) {
 					onLiveButtonClick();
 				} else {
+					Log.e(TAG, "m_btnLive->Uid和Url直播方式均已过期!");
 					autoToast("Uid和Url直播方式均已过期!");
 				}
+
 			}
 		});
 
@@ -171,6 +191,13 @@ public class LiveActivity extends BaseActivity {
 			}
 		});
 
+		if (!RDLiveSDK.enableCustomData()) {
+			mCustom.setVisibility(View.GONE);
+		} else {
+			mCustom.setVisibility(View.VISIBLE);
+		}
+		outTationHandler = new OutOrientationHandler(
+				findViewById(R.id.out_orientation_layout_root));
 	}
 
 	private void onCheckCamareFlash() {
@@ -211,19 +238,14 @@ public class LiveActivity extends BaseActivity {
 		@Override
 		public void onSingleTapUp(MotionEvent e) {
 			RDLiveSDK.cameraFocus((int) e.getX(), (int) e.getY());
-			hideInput();
 		}
 	};
-
-	private void onToast(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// Log.e(this.toString(), "onstart--" + RDLiveSDK.isLiving()
-		// + "--isLivingUI:" + isLivingUI);
+		logI(this.toString(), "onstart--" + RDLiveSDK.isLiving()
+				+ "--isLivingUI:" + isLivingUI);
 
 		if (isfirst) {
 			isfirst = false;
@@ -244,52 +266,16 @@ public class LiveActivity extends BaseActivity {
 
 	}
 
-	private class MyOrientationEventListener extends OrientationEventListener {
-		/**
-		 * 当前方向度数
-		 */
-		int mOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;
-
-		public MyOrientationEventListener(Context context) {
-			super(context);
-		}
-
-		@Override
-		public void onOrientationChanged(int orientation) {
-			// 手机平放时，检测不到有效的角度
-			if (orientation == ORIENTATION_UNKNOWN)
-				return;
-			mOrientation = Utils.roundOrientation(orientation, mOrientation);
-			// 根据显示方向和当前手机方向，得出当前各个需要与方向适应的控件修正方向
-			int orientationCompensation = mOrientation
-					+ Utils.getDisplayRotation(LiveActivity.this);
-			if (mOrientationCompensation != orientationCompensation) {
-				mOrientationCompensation = orientationCompensation;
-				if (!isLiving() || !isLivingUI) {// 只能在直播开始之前调用
-					RDLiveSDK.onOrientationChanged();
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * 修正的方向度数(90的倍数）
-	 */
-	private int mOrientationCompensation = 0;
-
 	/**
 	 * 该方法有缺陷，手机屏幕直接旋转180度，无法响应回调 建议使用 m_orientationListener
 	 */
-	// @Override
-	// public void onConfigurationChanged(Configuration newConfig) {
-	// super.onConfigurationChanged(newConfig);
-	// RDLiveSDK.onOrientationChanged();
-	// Log.e("onConfigurationChanged", this.toString() + "---"
-	// + newConfig.screenWidthDp + "*" + newConfig.screenHeightDp
-	// + "---" + newConfig.orientation);
-	//
-	// }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		Log.e("onConfigurationChangedActivity", this.toString() + "---"
+				+ newConfig.screenWidthDp + "*" + newConfig.screenHeightDp
+				+ "---" + newConfig.orientation);
+	}
 
 	private boolean isLivingUI = false;
 
@@ -334,11 +320,16 @@ public class LiveActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		logI(TAG, "onDestroy");
 		RDLiveSDK.onExit(this);
 		super.onDestroy();
 		doExitLiving = false;
 		if (null != menuHanlder) {
 			menuHanlder.onDestory();
+		}
+		if (null != outTationHandler) {
+			outTationHandler.onDestory();
+			outTationHandler = null;
 		}
 	}
 
@@ -375,64 +366,37 @@ public class LiveActivity extends BaseActivity {
 	 * 开始直播
 	 */
 	private void onLiveButtonClick() {
-		if (TextUtils.isEmpty(etliveTitle.getText().toString())) {
-			autoToast("请设置直播标题!");
-			return;
-		}
-		hideInput();
 		if (Utils.checkNetworkInfo(this) == Utils.UNCONNECTED) {
 			autoToast("请打开网络连接!");
 			return;
 		}
-		AlertDialog.Builder ab = new AlertDialog.Builder(this);
-		ab.setTitle("选择直播码流");
-		ab.setItems(
-				new String[] { "400K", "600K", "800K", "1.2M", "1.5M", "2M" },
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						int nBitrate;
-						switch (which) {
-						case 0:
-							nBitrate = 400 * 1000;
-							break;
-						case 1:
-							nBitrate = 600 * 1000;
-							break;
-						case 3:
-							nBitrate = 1200 * 1000;
-							break;
-						case 4:
-							nBitrate = 1500 * 1000;
-							break;
-						case 5:
-							nBitrate = 2000 * 1000;
-							break;
-						default:
-							nBitrate = 800 * 1000;
-							break;
-						}
-						// 锁定方向
-						onLockScreen();
-						doLivePublish();
-					}
-				});
-		ab.show();
+		// 锁定方向
+		onLockScreen();
+		doLivePublish();
 	}
 
 	// 确认当前屏幕方向锁定屏幕
 	private void onLockScreen() {
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		} else {
+		int displayRotation = RDLiveSDK.getDisplayRotation(this);
+		if (0 == displayRotation) {// 标准竖屏
 			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			setRequestedOrientation(lastOrientation);
+		} else if (90 == displayRotation) {// 标准横屏
+			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+			setRequestedOrientation(lastOrientation);
+		} else if (180 == displayRotation) {// 反向竖屏
+			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+			setRequestedOrientation(lastOrientation);
+		} else if (270 == displayRotation) {// 反向横屏
+			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+			setRequestedOrientation(lastOrientation);
+		} else {
+			lastOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+			setRequestedOrientation(lastOrientation);
 		}
 	}
 
-	private int lastOrientation = Configuration.ORIENTATION_UNDEFINED;
+	private int lastOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
 	/**
 	 * 开始直播前锁定方向，从后台切回前台还原锁定方向
@@ -440,11 +404,9 @@ public class LiveActivity extends BaseActivity {
 	 * @param mOrientation
 	 */
 	private void onSureOrientation(int mOrientation) {
-		if (mOrientation == Configuration.ORIENTATION_LANDSCAPE) {// 锁定横屏
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		} else if (mOrientation == Configuration.ORIENTATION_PORTRAIT) {// 锁定竖屏
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		} else {// 自适应
+		if (ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED != lastOrientation) {//
+			setRequestedOrientation(lastOrientation);
+		} else {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 		}
 	}
@@ -456,15 +418,12 @@ public class LiveActivity extends BaseActivity {
 
 	private void doLivePublish() {
 		if (!RDLiveSDK.isLiving()) {
-			String title = etliveTitle.getText().toString();
-			etliveTitle.setText("");
-			etliveTitle.setVisibility(View.GONE);
 			m_btnLive.setVisibility(View.GONE);
 			try {
 				RDLiveSDK.setReconnectionTimeOut(RECONNECTION_TIMEOUT);
 				RDLiveSDK.startPublish(uidORtmp, title);
 			} catch (Exception e) {
-				onToast(e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			autoToast("正在直播中...");
@@ -521,11 +480,11 @@ public class LiveActivity extends BaseActivity {
 			onCheckCamareFlash();
 			if (!isliving) {// 未直播
 				m_btnLive.setVisibility(View.VISIBLE);
-				etliveTitle.setVisibility(View.VISIBLE);
-
+				if (outTationHandler != null) {
+					outTationHandler.checkGone();
+				}
 			} else {// 直播中
 				m_btnLive.setVisibility(View.INVISIBLE);
-				etliveTitle.setVisibility(View.INVISIBLE);
 			}
 		}
 
@@ -538,20 +497,21 @@ public class LiveActivity extends BaseActivity {
 		@Override
 		public void onScreenShot(int nResult, String msg) {
 			if (nResult == ResultConstants.SUCCESS) {
-				onToast("onScreenShot:截图成功，保存路径为->" + msg);
+				Log.i(TAG, "onScreenShot:截图成功，保存路径为->" + msg);
 			} else {
-				onToast("onScreenShot: 截图失败,result:" + nResult + ",path:" + msg);
+				Log.e(TAG, "onScreenShot: 截图失败,result:" + nResult + ",path:"
+						+ msg);
 			}
 		}
 
 		@Override
 		public void onCamera(int nResult, String strResultInfo) {
-			onToast("onCamera->" + nResult + "...." + strResultInfo);
+			Log.e(TAG, "onCamera->" + nResult + "...." + strResultInfo);
 		}
 
 		@Override
 		public void onPrepared(int nResult, String strResultInfo) {
-			onToast("onPrepared->" + "初始化成功" + strResultInfo);
+			Log.d(TAG, "onPrepared->" + "初始化成功" + strResultInfo);
 			RDLiveSDK.setCameraZoomHandler(m_hlrCameraZoom);
 			// 设置自定义推流数据
 			if (RDLiveSDK.enableCustomData() && null != customHanlder) {
@@ -579,12 +539,12 @@ public class LiveActivity extends BaseActivity {
 							+ RDLiveSDK.getFlashMode());
 			camare_flash.setVisibility(RDLiveSDK.isFaceFront() ? View.GONE
 					: View.VISIBLE);
+
+			menuHanlder.onFaceMenuShow();
 		}
 
 		@Override
 		public void onRecordBegin(int nResult, String strResultInfo) {
-			onToast("onLiveRecordBegin->" + nResult + "...." + strResultInfo);
-
 			Log.i(TAG, "liveActivity->onRecordBegin" + nResult + "-->"
 					+ strResultInfo);
 			refreshButtonsStatus();
@@ -628,7 +588,7 @@ public class LiveActivity extends BaseActivity {
 		@Override
 		public void onGetRecordStatus(int nPosition, int nRecordFPS, int delayed) {
 			if (delayed > 3000) {
-				Log.e("onGetRecordStatus", "当前网络较慢,延迟" + (delayed / 1000) + "秒");
+				Log.i("onGetRecordStatus", "当前网络较慢,延迟" + (delayed / 1000) + "秒");
 			}
 		}
 
@@ -653,7 +613,6 @@ public class LiveActivity extends BaseActivity {
 		public void onPermissionFailed(int nResult, String strResultInfo) {
 			Log.e(TAG, "onPermissionFailed->" + strResultInfo);
 			if (nResult == ResultConstants.PERMISSION_FAILED) {
-				onToast(strResultInfo);
 				Log.e(TAG, "onPermissionFailed->" + strResultInfo);
 				finish();
 			}
@@ -668,7 +627,7 @@ public class LiveActivity extends BaseActivity {
 	 * 恢复屏幕方向随系统旋转
 	 */
 	private void onResetOrientation() {
-		lastOrientation = 0;
+		lastOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 
@@ -701,29 +660,22 @@ public class LiveActivity extends BaseActivity {
 	 * @param context
 	 * @param uidORtmp
 	 * @param config
+	 * @param title
 	 */
 	public static void startSelf(Context context, String uidORtmp,
-			LiveConfig config) {
+			LiveConfig config, String title) {
 		if (!TextUtils.isEmpty(uidORtmp)) {
 			RDLiveSDK.onInit(context);
 			Intent intent = new Intent();
 			intent.setClass(context, LiveActivity.class);
 			intent.putExtra(PARAMUIDO_RTMP, uidORtmp);
 			intent.putExtra(PARAMLIVE_CONFIG, config);
+			intent.putExtra(PARAMLIVE_TITLE, title);
 
 			context.startActivity(intent);
 		} else {
 			Toast.makeText(context, "参数不齐", Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	/**
-	 * 隐藏输入法
-	 */
-	private void hideInput() {
-		InputMethodManager input = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		input.hideSoftInputFromWindow(etliveTitle.getWindowToken(),
-				InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	/**
@@ -745,6 +697,7 @@ public class LiveActivity extends BaseActivity {
 			// App切到后台,暂停推流
 			RDLiveSDK.pausePublish();
 		}
+		PlayerUtils.getInstance().onPasue();
 		Log.i("onstop->removeCallbacks", this.toString());
 	}
 
@@ -761,7 +714,9 @@ public class LiveActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		m_orientationListener.enable();
+		orientationListener.enable();
+		PlayerUtils.getInstance().onResume();
+		logI("onResume", this.toString());
 	}
 
 	/***
@@ -770,7 +725,8 @@ public class LiveActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		m_orientationListener.disable();
+		orientationListener.disable();
+		logI("onPause", this.toString());
 	}
 
 	/**
@@ -781,6 +737,46 @@ public class LiveActivity extends BaseActivity {
 			menuHanlder.onBeautifyShow(enable);
 		}
 
+	}
+
+	private MyOrientationEventListener orientationListener;
+
+	private class MyOrientationEventListener extends OrientationEventListener {
+		/**
+		 * 当前方向度数
+		 */
+		int mOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;
+
+		public MyOrientationEventListener(Context context) {
+			super(context);
+		}
+
+		@Override
+		public void onOrientationChanged(int orientation) {
+
+			// 手机平放时，检测不到有效的角度
+			if (orientation == ORIENTATION_UNKNOWN)
+				return;
+			mOrientation = Utils.roundOrientation(orientation, mOrientation);
+			// 根据显示方向和当前手机方向，得出当前各个需要与方向适应的控件修正方向
+			int displayOr = Utils.getDisplayRotation(LiveActivity.this);
+			int orientationCompensation = (mOrientation + displayOr);
+			if (mOrientationCompensation != orientationCompensation) {
+				mOrientationCompensation = orientationCompensation;
+				if (isLiving()) {// 直播开始后
+					outTationHandler.setOrientation(mOrientationCompensation);
+				}
+			}
+		}
+	}
+
+	/*
+	 * 修正的方向度数(90的倍数）
+	 */
+	private int mOrientationCompensation = 0;
+
+	private void logI(String tag, String msg) {
+		Log.i(tag, msg);
 	}
 
 }

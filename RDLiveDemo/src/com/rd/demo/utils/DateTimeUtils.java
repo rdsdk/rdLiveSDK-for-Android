@@ -91,9 +91,22 @@ public class DateTimeUtils {
 	 * 获取视频当前播放时间格式化后的字符串
 	 * 
 	 * @param duration
-	 * @return   70:59
+	 * @return 70:59
 	 */
 	public static String updateTime(int duration) {
 		return DateTimeUtils.stringForTime(duration, false, true, false, true);
+	}
+
+	/**
+	 * 
+	 * @param mills
+	 * @return 只包含mm:S 或者HH:mm:S
+	 */
+	public static String millsTommS(int mills) {
+		return DateTimeUtils.stringForTime(mills, false, true, false, true);
+	}
+
+	public static String millsTommS(long mills) {
+		return millsTommS((int) mills);
 	}
 }

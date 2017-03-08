@@ -3,16 +3,9 @@
     android:id="@+id/mixlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone" >
-
-    <View
-        android:id="@+id/mix_view_top"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/shadow_music_layout" />
+    android:background="@color/transparent_black" >
 
     <LinearLayout
-        android:id="@+id/shadow_music_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -41,8 +34,19 @@
             android:layout_height="wrap_content"
             android:cacheColorHint="@null"
             android:divider="@null"
-            android:minHeight="150dp" >
+            android:minHeight="150dp"
+            android:scrollbars="@null" >
         </ListView>
+
+        <TextView
+            android:id="@+id/btnMixClose"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:text="@string/closemix"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16" >
+        </TextView>
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 锁定布局 手机旋转的提示 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/out_orientation_layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black80"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone" >
+
+    <com.rd.lib.ui.RotateRelativeLayout
+        android:id="@+id/out_orientation_layout"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/out_orientation_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@null" />
+
+        <TextView
+            android:id="@+id/out_orientation_text_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/out_orientation_img"   
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/transparent_white"
+            android:textSize="@dimen/text_size_15" />
+
+        <TextView
+            android:id="@+id/out_orientation_text_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/out_orientation_text_1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18" />
+    </com.rd.lib.ui.RotateRelativeLayout>
+
+</LinearLayout>
