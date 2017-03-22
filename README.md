@@ -3,8 +3,8 @@
 
 -------------------
 
-###SDK功能介绍:
-####1.直播推流
+### SDK功能介绍:
+#### 1.直播推流
 * **实时美颜**	
 * **滤镜** 	内置主流滤镜，支持扩展更多滤镜
 * **协议** 	RTMP协议，支持主流服务器
@@ -18,26 +18,26 @@
 * **静音** 支持实时静音与取消静音
 * **支持横竖屏**
 	
-####2.播放器
+#### 2.播放器
 * **低延迟**
 * **协议** 	支持RTSP/RTMP协议，支持主流服务器
 * **支持自定义布局**
 * **静音** 支持实时静音与取消静音
 * **支持横竖屏**
 
-####&emsp;截图
+#### &emsp;截图
 <img src="website/static/live1.jpg" width = "200" /> <img src="website/static/live2.jpg" width = "200" /> <img src="website/static/live3.jpg" width = "200" /> <img src="website/static/live4.jpg" width = "200" />
 
-###最新SDK下载(以下链接是最新的，github代码会稍有延迟)：
+### 最新SDK下载(以下链接是最新的，github代码会稍有延迟)：
 
 [SDK下载请单击](http://d.56show.com/rdsdk/private/pack/rd_live_android_20170308.zip)
 
-###功能试用：
+### 功能试用：
 下载以下demo应用，可以进行功能试用。
 
 [点击下载](https://raw.githubusercontent.com/rdsdk/rdLiveSDK-for-Android/master/RDLiveDemo-release.apk)
 
-###关于授权：
+### 关于授权：
 
 www.rdsdk.com 致力于专业的人做专业的事，降低客户的开发时间和开发成本，你只需要支付很少的费用，花上几个小时就能增加直播及回放功能。
 
@@ -51,7 +51,7 @@ www.rdsdk.com 致力于专业的人做专业的事，降低客户的开发时间
 
 [点击查看](https://rdsdk.github.io/rdLiveSDK-for-Android/RDLiveSDK/docs/com.rd.live/index.html)
 
-###洽谈咨询：
+### 洽谈咨询：
 
 **SDK交流群：** [305128688](http://shang.qq.com/wpa/qunwpa?idkey=bb9ac035ffa2d930719535a3b5d4542a780bb0f94613385fd93c996ee816ef05)
 
